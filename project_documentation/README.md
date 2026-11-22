@@ -3,36 +3,34 @@
 ## Prefect end-to-end pipeline run
 
 - **Flow:** `online-retail-medallion-pipeline`
-- **Run name:** `sympathetic-panda`
-- **Run ID:** `20bb2870-5314-4322-ae2e-0220729e56a0`
+- **Deployment:** `online-retail-on-demand`
+- **Run name:** `elegant-pigeon`
+- **Run ID:** `0ccd9a0e-c49d-4a12-8de8-b9008c75331c`
 - **Status:** Completed
-- **Started:** 22 November 2026, 3:00:46 PM
-- **Duration:** 1 minute 46 seconds
-- **Task runs:** 7 completed
+- **Started:** 22 November 2026, 5:49:19 PM (local time)
+- **Completed:** 22 November 2026, 5:52:39 PM (local time)
+- **Duration:** 3 minutes 21 seconds (as displayed in the Prefect UI)
+- **Task runs:** All 10 pipeline tasks completed
 
 The Prefect flow executed these stages in order:
 
-1. UCI ingestion to Landing
-2. Catalog API capture to Landing
-3. Online Retail and product-catalog Bronze ingestion
-4. Online Retail and product-catalog Silver processing
-5. Gold feature engineering
+1. UCI ingestion and catalog API capture to Landing
+2. Online Retail and product-catalog Bronze ingestion
+3. Online Retail and product-catalog Silver processing
+4. Gold feature engineering
+5. Feature-store registration
+6. Recommendation-model training and evaluation
+7. EDA dashboard generation
 
-The Prefect UI screenshot shows the completed flow graph and task runs:
+The run was started with **Quick run** from the Prefect UI. The screenshot
+shows its Completed status and completed task runs:
 
-![Completed Prefect pipeline run](./evidence/prefect_full_pipeline.png)
+![Completed Prefect UI run and flow graph](./evidence/prefect_full_pipeline_2026-11-22.png)
 
-This screenshot predates the EDA and feature-store stages. The current flow
-registers Gold features and then generates EDA as its final task. A Prefect run
-resumed at Gold (`academic-earthworm`, `e6abe7db-8e96-48bb-91b9-22e87103ffa7`)
-completed Gold followed by EDA before feature-store registration was added.
-After feature-store integration, a run resumed at `feature_store`
-(`determined-ant`, `59ec23d3-33dd-4312-939d-84f2b9e1f8d6`) completed
-registration and the downstream EDA stage. A later run resumed at Gold
-(`jade-goat`, `7e44f9c3-2146-477b-9b9b-bc67aeb875c6`) completed Gold,
-registered a new feature version, and refreshed EDA. Two retained versions
-were verified with pinned retrieval. The full pipeline from ingestion has not
-yet been rerun with the newer stages.
+The Prefect UI identifies the run as `Completed` and shows all task runs as
+completed. The screenshot is saved locally in this repository; the live run
+details are available at [the local Prefect UI](http://127.0.0.1:4200/runs/flow-run/0ccd9a0e-c49d-4a12-8de8-b9008c75331c)
+while the local Prefect server is running.
 
 The quality summaries and output manifests are available under `../data/`.
 The recommendation model and its separately tracked evaluation are documented
@@ -70,6 +68,7 @@ experiment store under `../data/model_tracking/`.
 
 ## Remaining assignment work
 
-- Data versioning workflow, such as DVC
+- Commit and push the configured Git LFS data snapshot; see
+  [Data versioning with Git LFS](../README.md#data-versioning-with-git-lfs).
 - Data-quality PDF and final project report
 - Walkthrough video, project ZIP, and accessible Drive links

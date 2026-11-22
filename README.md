@@ -550,10 +550,43 @@ data/
 A fresh workspace can recreate these outputs by running the master flow from
 UCI ingestion.
 
-The initial Prefect screenshot is
-`project_documentation\evidence\prefect_full_pipeline.png`. It documents an
-earlier run before feature store, model training, and the latest EDA flow were
-added; do not present it as proof of the current full pipeline.
+The Prefect deployment `online-retail-on-demand` was triggered from the UI
+using **Quick run**. Run `elegant-pigeon`
+(`0ccd9a0e-c49d-4a12-8de8-b9008c75331c`) completed all pipeline tasks in
+3 minutes 21 seconds (as shown in the Prefect UI) on 22 November 2026. The
+current run evidence is in
+[project documentation](project_documentation/README.md#prefect-end-to-end-pipeline-run),
+with a [screenshot of the completed run and flow graph](project_documentation/evidence/prefect_full_pipeline_2026-11-22.png).
+
+## Data versioning with Git LFS
+
+Git LFS versions the source and transformed CSV files, source workbook/archive,
+and compressed model artifacts. Small manifests, quality reports, and
+experiment metadata remain regular Git files. The generated EDA dashboard and
+local API logs are ignored because the pipeline can recreate them.
+
+Run this once in a clone to enable the local Git LFS filters:
+
+```powershell
+git lfs install
+```
+
+For the initial snapshot and after each pipeline run, review and add the
+versioned data, then commit and push it with Git:
+
+```powershell
+git add .gitattributes .gitignore
+git add data/raw data/landing data/bronze data/silver data/gold data/feature_store data/models data/model_tracking
+git lfs ls-files
+git status
+git commit -m "Version pipeline data with Git LFS"
+git push origin main
+```
+
+After cloning or switching to a commit containing LFS data, retrieve its file
+contents with `git lfs pull`. GitHub Free currently includes 10 GiB each of
+LFS storage and download bandwidth per billing cycle; each changed LFS file
+version uses additional storage. See [GitHub's Git LFS billing details](https://docs.github.com/en/billing/concepts/product-billing/git-lfs).
 
 ## Dependencies and environment
 
@@ -609,9 +642,9 @@ which writes to a local JSON experiment tracker.
 | Preparation and EDA | Silver preparation and EDA script, interactive dashboard, summary JSON, and PNG charts implemented; no notebook is currently included. |
 | Feature engineering and transformation | Gold customer/product/interaction features implemented; SQL schema deliverable remains. |
 | Feature store | Custom metadata registry, immutable versions, checksums, pinned retrieval, and sample retrieval implemented. |
-| Data versioning and lineage | Layer manifests and model run checksums exist; DVC/Git LFS workflow is not implemented. Workspace is not currently a Git repository. |
+| Data versioning and lineage | Git LFS rules cover source and transformed data; manifests and experiment metadata use Git. The initial local snapshot must still be committed and pushed to publish it. |
 | Model training and evaluation | Saved item-item model, temporal metrics, baseline, local experiment run record, and CLI inference implemented. MLflow proper is not used. |
-| Orchestration | Prefect flow, stage resumption, local UI/deployment support, and successful full-pipeline execution implemented; capture an updated full-flow screenshot for the report. |
+| Orchestration | Prefect flow, stage resumption, local UI/deployment support, and a successful UI-triggered full-pipeline run with saved screenshot evidence implemented. |
 | Final submission | Final PDF report, walkthrough video, project ZIP, and accessible Drive links remain. |
 
 The assignment text asks for a 5-10 minute video, while the earlier course
@@ -647,9 +680,9 @@ starting a new chat; the transcript is available for additional detail.
 
 ## Recommended next steps
 
-1. Capture current Prefect and Streamlit screenshots for the final report/demo.
-2. Implement DVC after deciding on a storage remote with adequate capacity;
-   do not store a duplicate DVC remote on the nearly full D: drive.
+1. Capture a current Streamlit screenshot for the final report/demo.
+2. Review and push the initial Git LFS data snapshot; check usage against the
+   GitHub Free quota before adding many changed data versions.
 3. Add the SQL schema deliverable and Data Quality PDF.
 4. Prepare the final report, record the instructor-approved video duration,
    package the project, and verify Drive access for BITS accounts.
