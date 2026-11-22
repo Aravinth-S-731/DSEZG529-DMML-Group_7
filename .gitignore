@@ -1,5 +1,6 @@
-# Generated datasets, models, reports, and run artifacts
-/data/*/
+# Re-creatable dashboards and local API logs
+/data/eda/
+/data/orchestration/
 
 # Python virtual environments and generated caches
 .venv/

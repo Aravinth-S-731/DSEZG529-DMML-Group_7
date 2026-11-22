@@ -1,0 +1,19 @@
+{
+  "dataset": "online_retail",
+  "source_type": "uci_batch_archive",
+  "source_url": "https://archive.ics.uci.edu/static/public/352/online%2Bretail.zip",
+  "directory": "F:\\DMML\\data\\raw\\online_retail",
+  "downloaded_at_utc": "2026-11-22T12:19:54.279947+00:00",
+  "assets": [
+    {
+      "file": "source.zip",
+      "file_size_bytes": 23715478,
+      "sha256": "f5385cbb54bbebf7196389109c6b0621faab0c304e3702548165e71c84aede8b"
+    },
+    {
+      "file": "Online Retail.xlsx",
+      "file_size_bytes": 23715344,
+      "sha256": "43465a06f2ccf7c8b5bd2892bc7defb52f97487934fe93b16ae4c3936424676d"
+    }
+  ]
+}

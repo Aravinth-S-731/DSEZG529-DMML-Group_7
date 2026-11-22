@@ -1,0 +1,34 @@
+{
+  "schema_version": "1",
+  "created_at_utc": "2026-11-22T12:21:26.480530+00:00",
+  "inputs": {
+    "online_retail": {
+      "silver_manifest_sha256": "910c5f5afcf31d245efe778dea30c763baa00531cf0dcc929eb27cb104a7dd26",
+      "input_rows": 541909
+    },
+    "product_catalog": {
+      "silver_manifest_sha256": "d68acdac77c2bf354c3b766ab5ebc2a5846730292d4f9f8a1acaa0a4a727d3d4",
+      "input_rows": 4070
+    }
+  },
+  "files": [
+    {
+      "file": "customer_product_interactions.csv.gz",
+      "sha256": "39fe226e96ea197a1d98dd4d3b5ea19006f7b03c59c46fe9a45be6d5a6155ad7",
+      "size_bytes": 1986466,
+      "row_count": 266802
+    },
+    {
+      "file": "customer_features.csv.gz",
+      "sha256": "3a39426c93c4433f6fe17e400496448266034b2ae0e7b9d9fc3a90d6b24f04dd",
+      "size_bytes": 84638,
+      "row_count": 4339
+    },
+    {
+      "file": "product_features.csv.gz",
+      "sha256": "bd86c82d5214974bc8696759cb73249c25a5e6833b1d06a5c301768a644d9f70",
+      "size_bytes": 115411,
+      "row_count": 3958
+    }
+  ]
+}

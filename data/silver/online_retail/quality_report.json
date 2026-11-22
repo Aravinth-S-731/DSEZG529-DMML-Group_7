@@ -1,0 +1,281 @@
+{
+  "dataset": "online_retail",
+  "generated_at_utc": "2026-11-22T12:21:13.570544+00:00",
+  "bronze_manifest_sha256": "70375a7a1100f69ff2fb9936e767717e090236e096e0866611340207d6fad869",
+  "input_rows": 541909,
+  "silver_rows": 541909,
+  "quarantined_rows": 0,
+  "metrics": {
+    "cancelled_invoice": 9288,
+    "duplicate_record_content": 5268,
+    "missing_customer_id": 135080,
+    "missing_description": 1454,
+    "negative_quantity_return": 10624,
+    "negative_unit_price": 2,
+    "recommendation_eligible_rows": 397924,
+    "silver_rows": 541909
+  },
+  "files": [
+    {
+      "bronze_file": "transactions_2010-12.csv",
+      "bronze_sha256": "4092ae460572f18457cf3e5942775762aacaf1e96e37f22dcc0cce24e42d2a86",
+      "input_rows": 42481,
+      "silver_rows": 42481,
+      "quarantined_rows": 0,
+      "silver_file": "transactions_2010-12.csv.gz",
+      "silver_sha256": "86ebbe8a2a836c243a2ff0d4b8ee2586bdb8a6dd60bad11443b693136d03778f",
+      "silver_size_bytes": 4563390,
+      "quarantine_file": null,
+      "quality_metrics": {
+        "cancelled_invoice": 728,
+        "duplicate_record_content": 500,
+        "missing_customer_id": 15631,
+        "missing_description": 125,
+        "negative_quantity_return": 798,
+        "recommendation_eligible_rows": 26160,
+        "silver_rows": 42481
+      }
+    },
+    {
+      "bronze_file": "transactions_2011-01.csv",
+      "bronze_sha256": "363a3b98857dfa463733937dd01f207fe2f0aabb60b263598fc3ef18972b75e7",
+      "input_rows": 35147,
+      "silver_rows": 35147,
+      "quarantined_rows": 0,
+      "silver_file": "transactions_2011-01.csv.gz",
+      "silver_sha256": "58f67f5e07c56a0129fe471aab65bbb88ade5773b2635f9f4cb22ebcb4ff0d05",
+      "silver_size_bytes": 3780765,
+      "quarantine_file": null,
+      "quality_metrics": {
+        "cancelled_invoice": 701,
+        "duplicate_record_content": 247,
+        "missing_customer_id": 13235,
+        "missing_description": 114,
+        "negative_quantity_return": 797,
+        "recommendation_eligible_rows": 21232,
+        "silver_rows": 35147
+      }
+    },
+    {
+      "bronze_file": "transactions_2011-02.csv",
+      "bronze_sha256": "a0aaca3cd6df5676e93d7f177a0f4a4d9aa9faede02cb16c88290ba0277afa51",
+      "input_rows": 27707,
+      "silver_rows": 27707,
+      "quarantined_rows": 0,
+      "silver_file": "transactions_2011-02.csv.gz",
+      "silver_sha256": "fe10af89d39f1b191915b121b62a48e4ae0400b6d52a39d2e0ef0d9f5a3065e8",
+      "silver_size_bytes": 2981146,
+      "quarantine_file": null,
+      "quality_metrics": {
+        "cancelled_invoice": 475,
+        "duplicate_record_content": 228,
+        "missing_customer_id": 7344,
+        "missing_description": 65,
+        "negative_quantity_return": 523,
+        "recommendation_eligible_rows": 19928,
+        "silver_rows": 27707
+      }
+    },
+    {
+      "bronze_file": "transactions_2011-03.csv",
+      "bronze_sha256": "f9e6cd463c6254c56e35f5c160cc46a8b2a308ea6538c4e014b19f18354df4b7",
+      "input_rows": 36748,
+      "silver_rows": 36748,
+      "quarantined_rows": 0,
+      "silver_file": "transactions_2011-03.csv.gz",
+      "silver_sha256": "1bd54c9394a4a62753d73a7f536c5a925a593c1015749386b92bc810a626448a",
+      "silver_size_bytes": 3956081,
+      "quarantine_file": null,
+      "quality_metrics": {
+        "cancelled_invoice": 699,
+        "duplicate_record_content": 309,
+        "missing_customer_id": 8926,
+        "missing_description": 165,
+        "negative_quantity_return": 833,
+        "recommendation_eligible_rows": 27177,
+        "silver_rows": 36748
+      }
+    },
+    {
+      "bronze_file": "transactions_2011-04.csv",
+      "bronze_sha256": "40ae6548c4cceaecf54e052c8b97940fd3e2183594be727c7bf87dfc3c544290",
+      "input_rows": 29916,
+      "silver_rows": 29916,
+      "quarantined_rows": 0,
+      "silver_file": "transactions_2011-04.csv.gz",
+      "silver_sha256": "aa75e94262460121946f26147e415d868e17e8cf23e63b179da6222942cf676c",
+      "silver_size_bytes": 3222937,
+      "quarantine_file": null,
+      "quality_metrics": {
+        "cancelled_invoice": 559,
+        "duplicate_record_content": 215,
+        "missing_customer_id": 6718,
+        "missing_description": 226,
+        "negative_quantity_return": 745,
+        "recommendation_eligible_rows": 22644,
+        "silver_rows": 29916
+      }
+    },
+    {
+      "bronze_file": "transactions_2011-05.csv",
+      "bronze_sha256": "77438b55c20cf586433495c3bae8a698d8ad40ae0fe49ec5a04f7e93b872aa55",
+      "input_rows": 37030,
+      "silver_rows": 37030,
+      "quarantined_rows": 0,
+      "silver_file": "transactions_2011-05.csv.gz",
+      "silver_sha256": "30ce6905834df056d0f0bf9f0442328606223fa7a08183a98c6d0a0d44540b7d",
+      "silver_size_bytes": 3984725,
+      "quarantine_file": null,
+      "quality_metrics": {
+        "cancelled_invoice": 621,
+        "duplicate_record_content": 248,
+        "missing_customer_id": 8122,
+        "missing_description": 138,
+        "negative_quantity_return": 738,
+        "recommendation_eligible_rows": 28322,
+        "silver_rows": 37030
+      }
+    },
+    {
+      "bronze_file": "transactions_2011-06.csv",
+      "bronze_sha256": "72441f1b4de8d5d1e49df356dde5df7ec4ddd83776b56e6951956c9741cf9945",
+      "input_rows": 36874,
+      "silver_rows": 36874,
+      "quarantined_rows": 0,
+      "silver_file": "transactions_2011-06.csv.gz",
+      "silver_sha256": "01405638bac3c3d961286a123efed2e227439233c6b90d9aedc42686acfe291d",
+      "silver_size_bytes": 3971414,
+      "quarantine_file": null,
+      "quality_metrics": {
+        "cancelled_invoice": 711,
+        "duplicate_record_content": 265,
+        "missing_customer_id": 9038,
+        "missing_description": 91,
+        "negative_quantity_return": 818,
+        "recommendation_eligible_rows": 27185,
+        "silver_rows": 36874
+      }
+    },
+    {
+      "bronze_file": "transactions_2011-07.csv",
+      "bronze_sha256": "a26076772246067f2de5f36b676c0b7b6f5341292ffdf28b12de3538646e3628",
+      "input_rows": 39518,
+      "silver_rows": 39518,
+      "quarantined_rows": 0,
+      "silver_file": "transactions_2011-07.csv.gz",
+      "silver_sha256": "692902a3beae7e6819b786445c466cd1dff0483f36b48be1ba61513bdbb5927c",
+      "silver_size_bytes": 4249219,
+      "quarantine_file": null,
+      "quality_metrics": {
+        "cancelled_invoice": 685,
+        "duplicate_record_content": 251,
+        "missing_customer_id": 12016,
+        "missing_description": 155,
+        "negative_quantity_return": 802,
+        "recommendation_eligible_rows": 26827,
+        "silver_rows": 39518
+      }
+    },
+    {
+      "bronze_file": "transactions_2011-08.csv",
+      "bronze_sha256": "8432cf3d2c05754d6e2ac274d491befb48d21bd52eee962f1be90e1420c6fab7",
+      "input_rows": 35284,
+      "silver_rows": 35284,
+      "quarantined_rows": 0,
+      "silver_file": "transactions_2011-08.csv.gz",
+      "silver_sha256": "8a9695b3c3b995e7e0ee64df1df0ce5ffeef71847651e56578d35af50c62d96a",
+      "silver_size_bytes": 3796994,
+      "quarantine_file": null,
+      "quality_metrics": {
+        "cancelled_invoice": 668,
+        "duplicate_record_content": 220,
+        "missing_customer_id": 7622,
+        "missing_description": 82,
+        "negative_quantity_return": 718,
+        "negative_unit_price": 2,
+        "recommendation_eligible_rows": 27013,
+        "silver_rows": 35284
+      }
+    },
+    {
+      "bronze_file": "transactions_2011-09.csv",
+      "bronze_sha256": "c95485e4699ff9661f460ee873c495fbebd2a495114379f12d8bf8dea5390795",
+      "input_rows": 50226,
+      "silver_rows": 50226,
+      "quarantined_rows": 0,
+      "silver_file": "transactions_2011-09.csv.gz",
+      "silver_sha256": "5f817950203ddf9c4ae6f6a90ef3e6067fa2b29924e11012974c16a1ef07b503",
+      "silver_size_bytes": 5402782,
+      "quarantine_file": null,
+      "quality_metrics": {
+        "cancelled_invoice": 805,
+        "duplicate_record_content": 365,
+        "missing_customer_id": 9404,
+        "missing_description": 99,
+        "negative_quantity_return": 903,
+        "recommendation_eligible_rows": 40030,
+        "silver_rows": 50226
+      }
+    },
+    {
+      "bronze_file": "transactions_2011-10.csv",
+      "bronze_sha256": "ab4220701d30afa06cc40fcf908da145448300246091d82b79fc8ef690bdc4be",
+      "input_rows": 60742,
+      "silver_rows": 60742,
+      "quarantined_rows": 0,
+      "silver_file": "transactions_2011-10.csv.gz",
+      "silver_sha256": "e02a4b34d8f0e127fbfd220a59e1d8f2f3f25d8220c19768a2acf3e18ef4cb38",
+      "silver_size_bytes": 6515998,
+      "quarantine_file": null,
+      "quality_metrics": {
+        "cancelled_invoice": 1200,
+        "duplicate_record_content": 773,
+        "missing_customer_id": 10047,
+        "missing_description": 104,
+        "negative_quantity_return": 1346,
+        "recommendation_eligible_rows": 49557,
+        "silver_rows": 60742
+      }
+    },
+    {
+      "bronze_file": "transactions_2011-11.csv",
+      "bronze_sha256": "8821a91e36ff68102bc1f45621276083dba81986c53e2acffe65e4b3769742c6",
+      "input_rows": 84711,
+      "silver_rows": 84711,
+      "quarantined_rows": 0,
+      "silver_file": "transactions_2011-11.csv.gz",
+      "silver_sha256": "9223971ee581b2fecb7e10cbc8327937d183568243da63e557142747c31523df",
+      "silver_size_bytes": 9077842,
+      "quarantine_file": null,
+      "quality_metrics": {
+        "cancelled_invoice": 1076,
+        "duplicate_record_content": 1368,
+        "missing_customer_id": 19113,
+        "missing_description": 75,
+        "negative_quantity_return": 1213,
+        "recommendation_eligible_rows": 64545,
+        "silver_rows": 84711
+      }
+    },
+    {
+      "bronze_file": "transactions_2011-12.csv",
+      "bronze_sha256": "d4cd2670c3f1e3454d6c4d2d1561232811176f37c69821f58746abd03fcba872",
+      "input_rows": 25525,
+      "silver_rows": 25525,
+      "quarantined_rows": 0,
+      "silver_file": "transactions_2011-12.csv.gz",
+      "silver_sha256": "a0962734f39ac8952fdc879295f2c62b484a6895f982a3799582d9e94c1dc145",
+      "silver_size_bytes": 2742884,
+      "quarantine_file": null,
+      "quality_metrics": {
+        "cancelled_invoice": 360,
+        "duplicate_record_content": 279,
+        "missing_customer_id": 7864,
+        "missing_description": 15,
+        "negative_quantity_return": 390,
+        "recommendation_eligible_rows": 17304,
+        "silver_rows": 25525
+      }
+    }
+  ]
+}

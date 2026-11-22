@@ -1,0 +1,70 @@
+{
+  "schema_version": "1",
+  "experiment_name": "online-retail-recommendations",
+  "run_id": "0301b231477f437db8921ddd14205408",
+  "run_name": "item-item-cosine-temporal-evaluation",
+  "status": "FINISHED",
+  "started_at_utc": "2026-11-22T12:21:40.059345+00:00",
+  "completed_at_utc": "2026-11-22T12:22:28.643073+00:00",
+  "parameters": {
+    "algorithm": "binary-item-item-cosine",
+    "similarity": "binary_cosine",
+    "target_training_fraction": 0.8,
+    "max_neighbors_per_item": 100,
+    "evaluation_k_values": [
+      5,
+      10,
+      20
+    ],
+    "temporal_cutoff_inclusive": "2011-11-01T15:55:00",
+    "training_events": 314209,
+    "test_events": 78523,
+    "training_users": 3985,
+    "training_items": 3614,
+    "silver_manifest_sha256": "910c5f5afcf31d245efe778dea30c763baa00531cf0dcc929eb27cb104a7dd26"
+  },
+  "metrics": {
+    "item_item_cosine_precision_at_5": 0.0605042,
+    "item_item_cosine_recall_at_5": 0.02367335,
+    "item_item_cosine_ndcg_at_5": 0.06684416,
+    "item_item_cosine_precision_at_10": 0.0517507,
+    "item_item_cosine_recall_at_10": 0.03842378,
+    "item_item_cosine_ndcg_at_10": 0.06362594,
+    "item_item_cosine_precision_at_20": 0.04481793,
+    "item_item_cosine_recall_at_20": 0.06175818,
+    "item_item_cosine_ndcg_at_20": 0.06584119,
+    "popularity_baseline_precision_at_5": 0.03571429,
+    "popularity_baseline_recall_at_5": 0.01173665,
+    "popularity_baseline_ndcg_at_5": 0.03761081,
+    "popularity_baseline_precision_at_10": 0.0342437,
+    "popularity_baseline_recall_at_10": 0.01995612,
+    "popularity_baseline_ndcg_at_10": 0.0377982,
+    "popularity_baseline_precision_at_20": 0.0342437,
+    "popularity_baseline_recall_at_20": 0.03807067,
+    "popularity_baseline_ndcg_at_20": 0.0427488,
+    "evaluation_users": 1428,
+    "warm_item_pair_coverage_percent": 98.00568060348776
+  },
+  "tags": {
+    "task": "recommendation",
+    "evaluation": "chronological_holdout",
+    "saved_model_training_scope": "all_eligible_silver_events"
+  },
+  "artifacts": {
+    "model": {
+      "path": "F:\\DMML\\data\\models\\item_item_cosine\\0301b231477f437db8921ddd14205408\\model.json.gz",
+      "sha256": "bb1e1a291a97c1eaa36be29b541a837bf2034d135da8a678585cec46ae9779fd",
+      "size_bytes": 2819825
+    },
+    "evaluation_json": {
+      "path": "F:\\DMML\\data\\models\\item_item_cosine\\0301b231477f437db8921ddd14205408\\evaluation.json",
+      "sha256": "aa6a57b851d01c9c5dd7def4ce50747e1b6b39b13cb9ea8e391d517ee4548452",
+      "size_bytes": 2418
+    },
+    "evaluation_report": {
+      "path": "F:\\DMML\\data\\models\\item_item_cosine\\0301b231477f437db8921ddd14205408\\evaluation.md",
+      "sha256": "f009d926fc0925804c827fafe8640963ad36e61854722a82dc3c5a1620c497c2",
+      "size_bytes": 1449
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "generated_at_utc": "2026-11-22T12:22:04.058062+00:00",
+  "source": {
+    "silver_dataset": "online_retail",
+    "silver_manifest_sha256": "910c5f5afcf31d245efe778dea30c763baa00531cf0dcc929eb27cb104a7dd26"
+  },
+  "model": {
+    "algorithm": "binary-item-item-cosine",
+    "similarity": "cosine similarity over binary customer-item interactions",
+    "max_neighbors_per_item": 100,
+    "evaluation_k_values": [
+      5,
+      10,
+      20
+    ]
+  },
+  "split": {
+    "method": "global chronological holdout; all events at or before the cutoff timestamp are training, later events are test",
+    "target_training_fraction": 0.8,
+    "effective_training_fraction": 0.8000595826161352,
+    "cutoff_timestamp_inclusive": "2011-11-01T15:55:00",
+    "training_events": 314209,
+    "test_events": 78523,
+    "total_events": 392732,
+    "training_users": 3985,
+    "training_items": 3614
+  },
+  "evaluation": {
+    "test_users": 1884,
+    "evaluation_users": 1428,
+    "users_without_training_history": 354,
+    "heldout_user_product_pairs": 66456,
+    "heldout_pairs_for_known_users": 54786,
+    "heldout_pairs_without_training_history": 11670,
+    "previously_seen_user_product_pairs_excluded": 22043,
+    "new_to_user_test_pairs": 32743,
+    "warm_item_test_pairs": 32090,
+    "cold_item_test_pairs": 653,
+    "warm_item_pair_coverage_percent": 98.005681,
+    "recommendation_policy": "Evaluate previously unseen user-item pairs only when the item was present in the training catalog; report cold-start pairs separately.",
+    "precision_denominator": "K",
+    "averaging": "macro average over evaluation users"
+  },
+  "metrics": {
+    "item_item_cosine": {
+      "precision_at_5": 0.0605042,
+      "recall_at_5": 0.02367335,
+      "ndcg_at_5": 0.06684416,
+      "precision_at_10": 0.0517507,
+      "recall_at_10": 0.03842378,
+      "ndcg_at_10": 0.06362594,
+      "precision_at_20": 0.04481793,
+      "recall_at_20": 0.06175818,
+      "ndcg_at_20": 0.06584119,
+      "evaluated_users": 1428
+    },
+    "popularity_baseline": {
+      "precision_at_5": 0.03571429,
+      "recall_at_5": 0.01173665,
+      "ndcg_at_5": 0.03761081,
+      "precision_at_10": 0.0342437,
+      "recall_at_10": 0.01995612,
+      "ndcg_at_10": 0.0377982,
+      "precision_at_20": 0.0342437,
+      "recall_at_20": 0.03807067,
+      "ndcg_at_20": 0.0427488,
+      "evaluated_users": 1428
+    }
+  },
+  "run_id": "0301b231477f437db8921ddd14205408"
+}

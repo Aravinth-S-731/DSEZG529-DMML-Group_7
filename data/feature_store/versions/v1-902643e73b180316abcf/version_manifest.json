@@ -1,0 +1,31 @@
+{
+  "schema_version": "1",
+  "version_id": "v1-902643e73b180316abcf",
+  "created_at_utc": "2026-11-22T11:26:57.014989+00:00",
+  "gold_manifest_sha256": "d0d9f738c21783444f349efe903b24fdbb1c5f9cc4effcb22797953fb48effcd",
+  "silver_manifest_sha256s": {
+    "online_retail": "50eca2be14943e55e34484e7630ec39f0855da136e57575e1ff4069cba52b54d",
+    "product_catalog": "aa7eab68a2d984f29ec2a4011d7afe57819da60e2d478c63daaa213762f2466f"
+  },
+  "feature_metadata_sha256": "a6ea0587f06c094afb1451c6e3c63985ae1eb24059ed455bb46e29c65a69be2a",
+  "files": {
+    "customer_features": {
+      "file": "customer_features.csv.gz",
+      "sha256": "446105253a4ef56d5cf672e70e5e9ee851a31c956439718cb85d0df0f3b90819",
+      "size_bytes": 84638,
+      "row_count": 4339
+    },
+    "product_features": {
+      "file": "product_features.csv.gz",
+      "sha256": "42cf68e6c11a074647748b90b404260243a6bf14779c08e7bc935c2f4eb6c9f7",
+      "size_bytes": 115411,
+      "row_count": 3958
+    },
+    "customer_product_interactions": {
+      "file": "customer_product_interactions.csv.gz",
+      "sha256": "7d23b2990ed8f6b8eb17dc0125a7c31415a0532e8a3698d2f8314eef7ca6d321",
+      "size_bytes": 1986466,
+      "row_count": 266802
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "dataset": "product_catalog",
+  "generated_at_utc": "2026-11-22T12:21:13.766287+00:00",
+  "bronze_manifest_sha256": "d8a1bd0666dc4cd729fc655cb86d0c597ede38e57fc4bc0af0d37093814a49ff",
+  "input_rows": 4070,
+  "silver_rows": 4070,
+  "quarantined_rows": 0,
+  "metrics": {
+    "duplicate_stock_code_rows": 112,
+    "missing_description": 112,
+    "silver_rows": 4070
+  },
+  "files": [
+    {
+      "bronze_file": "products.csv",
+      "bronze_sha256": "694b70eafe9d795716b8920e9a5839485340fdf99e3d7496109bbe17a6cbbfb1",
+      "input_rows": 4070,
+      "silver_rows": 4070,
+      "quarantined_rows": 0,
+      "silver_file": "products.csv.gz",
+      "silver_sha256": "b34650180b15ed3a526b2ef4d6a34cb657ec2b4c0ca8fe2015b21e17c8de2c91",
+      "silver_size_bytes": 400490,
+      "quarantine_file": null,
+      "quality_metrics": {
+        "duplicate_stock_code_rows": 112,
+        "missing_description": 112,
+        "silver_rows": 4070
+      }
+    }
+  ]
+}

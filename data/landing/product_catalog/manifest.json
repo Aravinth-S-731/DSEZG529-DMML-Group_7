@@ -1,0 +1,22 @@
+{
+  "dataset": "product_catalog",
+  "source_type": "rest_api",
+  "created_at_utc": "2026-11-22T12:20:46.245353+00:00",
+  "raw_source": {
+    "directory": "F:\\DMML\\data\\raw\\product_catalog",
+    "file": "raw_response.json",
+    "sha256": "00048b0f0b4e84871c8f498d54326d3d4efc981776f29debf396378720909672"
+  },
+  "format": "CSV",
+  "columns": [
+    "stock_code",
+    "description"
+  ],
+  "row_count": 4070,
+  "processed_file": {
+    "file": "products.csv",
+    "file_size_bytes": 140560,
+    "sha256": "efba95fb2bc202265c629b5b3ccc98e51b35c9589850c0e3cf7c06b10cfdb176"
+  },
+  "catalog_provenance": "Product records are derived from the UCI Online Retail workbook; they are not an independent external catalog."
+}

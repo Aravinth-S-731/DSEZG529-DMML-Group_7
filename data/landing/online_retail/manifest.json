@@ -1,0 +1,125 @@
+{
+  "dataset": "online_retail",
+  "source_type": "uci_batch",
+  "created_at_utc": "2026-11-22T12:20:24.076154+00:00",
+  "raw_source": {
+    "directory": "F:\\DMML\\data\\raw\\online_retail",
+    "files": [
+      {
+        "file": "source.zip",
+        "file_size_bytes": 23715478,
+        "sha256": "f5385cbb54bbebf7196389109c6b0621faab0c304e3702548165e71c84aede8b"
+      },
+      {
+        "file": "Online Retail.xlsx",
+        "file_size_bytes": 23715344,
+        "sha256": "43465a06f2ccf7c8b5bd2892bc7defb52f97487934fe93b16ae4c3936424676d"
+      }
+    ]
+  },
+  "format": "CSV, one file per InvoiceDate month",
+  "columns": [
+    "InvoiceNo",
+    "StockCode",
+    "Description",
+    "Quantity",
+    "InvoiceDate",
+    "UnitPrice",
+    "CustomerID",
+    "Country"
+  ],
+  "total_rows": 541909,
+  "monthly_batches": [
+    {
+      "file": "transactions_2010-12.csv",
+      "month": "2010-12",
+      "row_count": 42481,
+      "file_size_bytes": 3816845,
+      "sha256": "12f0c613cde7cc3478d19b8b4dff53b88339ab58a9ab46662d118cb9cdca1a74"
+    },
+    {
+      "file": "transactions_2011-01.csv",
+      "month": "2011-01",
+      "row_count": 35147,
+      "file_size_bytes": 3127009,
+      "sha256": "e4cce328e98fe1c1d4207ac5fc7a59b881f7fe54b3246e38de29341cc28b1f87"
+    },
+    {
+      "file": "transactions_2011-02.csv",
+      "month": "2011-02",
+      "row_count": 27707,
+      "file_size_bytes": 2474391,
+      "sha256": "ebe35df2e07cdf9dd99150f22d2137283e143d98a807ad68bf68c0f7b74bc7e9"
+    },
+    {
+      "file": "transactions_2011-03.csv",
+      "month": "2011-03",
+      "row_count": 36748,
+      "file_size_bytes": 3280447,
+      "sha256": "e8026351f8c362722e9343aaf1a38dfe4a7d9241184fc53f5aba4ea62c410f5e"
+    },
+    {
+      "file": "transactions_2011-04.csv",
+      "month": "2011-04",
+      "row_count": 29916,
+      "file_size_bytes": 2675229,
+      "sha256": "91d57e845a95e64cee882d75a08fbdd2a22d7d8cae8df1e99da4e67146c18bef"
+    },
+    {
+      "file": "transactions_2011-05.csv",
+      "month": "2011-05",
+      "row_count": 37030,
+      "file_size_bytes": 3300246,
+      "sha256": "636c2b8be13f5a305e52a45278263ee979eed28a59d07d0e394467cba1820ff9"
+    },
+    {
+      "file": "transactions_2011-06.csv",
+      "month": "2011-06",
+      "row_count": 36874,
+      "file_size_bytes": 3285131,
+      "sha256": "4f189fef5b56338c110d815d55cdbcdaacd81a9773f92338e3bc59869108e6ee"
+    },
+    {
+      "file": "transactions_2011-07.csv",
+      "month": "2011-07",
+      "row_count": 39518,
+      "file_size_bytes": 3509818,
+      "sha256": "57cd9691ba9702ff2370ccaf3259a97d9ec42aebcb5d14954f64a33a9e9665b4"
+    },
+    {
+      "file": "transactions_2011-08.csv",
+      "month": "2011-08",
+      "row_count": 35284,
+      "file_size_bytes": 3148658,
+      "sha256": "d19421ef5ea078259e35baaa51a90a13f72f2528e231478615edfd3da199a879"
+    },
+    {
+      "file": "transactions_2011-09.csv",
+      "month": "2011-09",
+      "row_count": 50226,
+      "file_size_bytes": 4508773,
+      "sha256": "966528790b9855ba418ab89f5b1026e5469911ada0e4f1542627afa1cdc53ea3"
+    },
+    {
+      "file": "transactions_2011-10.csv",
+      "month": "2011-10",
+      "row_count": 60742,
+      "file_size_bytes": 5472390,
+      "sha256": "86cb748041676066f76c110270efaa63ea1b5e8c2d54c2515a3816424b5895ba"
+    },
+    {
+      "file": "transactions_2011-11.csv",
+      "month": "2011-11",
+      "row_count": 84711,
+      "file_size_bytes": 7609218,
+      "sha256": "8a97001ec717e7f1b260f859190641bcaa84bf7df7095a7dc6c960edebc0cea2"
+    },
+    {
+      "file": "transactions_2011-12.csv",
+      "month": "2011-12",
+      "row_count": 25525,
+      "file_size_bytes": 2279894,
+      "sha256": "e90514fece00c9c8b07781675a916f56c51861b24e83d079d2877a5c1cf4af4b"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "product_catalog",
+  "schema_version": "1",
+  "created_at_utc": "2026-11-22T12:21:13.766287+00:00",
+  "bronze_directory": "F:\\DMML\\data\\bronze\\product_catalog",
+  "bronze_manifest_sha256": "d8a1bd0666dc4cd729fc655cb86d0c597ede38e57fc4bc0af0d37093814a49ff",
+  "input_batch_count": 1,
+  "input_rows": 4070,
+  "silver_rows": 4070,
+  "quarantined_rows": 0,
+  "files": [
+    {
+      "bronze_file": "products.csv",
+      "bronze_sha256": "694b70eafe9d795716b8920e9a5839485340fdf99e3d7496109bbe17a6cbbfb1",
+      "silver_file": "products.csv.gz",
+      "silver_sha256": "b34650180b15ed3a526b2ef4d6a34cb657ec2b4c0ca8fe2015b21e17c8de2c91",
+      "row_count": 4070,
+      "quarantined_rows": 0,
+      "quarantine_file": null
+    }
+  ]
+}

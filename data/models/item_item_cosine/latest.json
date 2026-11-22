@@ -1,0 +1,8 @@
+{
+  "schema_version": "1",
+  "run_id": "0301b231477f437db8921ddd14205408",
+  "model_path": "0301b231477f437db8921ddd14205408/model.json.gz",
+  "evaluation_path": "0301b231477f437db8921ddd14205408/evaluation.json",
+  "tracking_record_path": "F:\\DMML\\data\\model_tracking\\experiments\\online-retail-recommendations\\runs\\0301b231477f437db8921ddd14205408\\run.json",
+  "experiment_name": "online-retail-recommendations"
+}

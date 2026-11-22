@@ -1,0 +1,16 @@
+{
+  "dataset": "product_catalog",
+  "source_type": "rest_api",
+  "source_url": "http://127.0.0.1:8000/products",
+  "directory": "F:\\DMML\\data\\raw\\product_catalog",
+  "downloaded_at_utc": "2026-11-22T12:20:46.237294+00:00",
+  "record_count": 4070,
+  "assets": [
+    {
+      "file": "raw_response.json",
+      "file_size_bytes": 287192,
+      "sha256": "00048b0f0b4e84871c8f498d54326d3d4efc981776f29debf396378720909672"
+    }
+  ],
+  "catalog_provenance": "Product records are derived from the UCI Online Retail workbook; they are not an independent external catalog."
+}

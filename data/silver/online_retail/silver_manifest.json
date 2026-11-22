@@ -1,0 +1,130 @@
+{
+  "dataset": "online_retail",
+  "schema_version": "1",
+  "created_at_utc": "2026-11-22T12:21:13.570544+00:00",
+  "bronze_directory": "F:\\DMML\\data\\bronze\\online_retail",
+  "bronze_manifest_sha256": "70375a7a1100f69ff2fb9936e767717e090236e096e0866611340207d6fad869",
+  "input_batch_count": 13,
+  "input_rows": 541909,
+  "silver_rows": 541909,
+  "quarantined_rows": 0,
+  "files": [
+    {
+      "bronze_file": "transactions_2010-12.csv",
+      "bronze_sha256": "4092ae460572f18457cf3e5942775762aacaf1e96e37f22dcc0cce24e42d2a86",
+      "silver_file": "transactions_2010-12.csv.gz",
+      "silver_sha256": "86ebbe8a2a836c243a2ff0d4b8ee2586bdb8a6dd60bad11443b693136d03778f",
+      "row_count": 42481,
+      "quarantined_rows": 0,
+      "quarantine_file": null
+    },
+    {
+      "bronze_file": "transactions_2011-01.csv",
+      "bronze_sha256": "363a3b98857dfa463733937dd01f207fe2f0aabb60b263598fc3ef18972b75e7",
+      "silver_file": "transactions_2011-01.csv.gz",
+      "silver_sha256": "58f67f5e07c56a0129fe471aab65bbb88ade5773b2635f9f4cb22ebcb4ff0d05",
+      "row_count": 35147,
+      "quarantined_rows": 0,
+      "quarantine_file": null
+    },
+    {
+      "bronze_file": "transactions_2011-02.csv",
+      "bronze_sha256": "a0aaca3cd6df5676e93d7f177a0f4a4d9aa9faede02cb16c88290ba0277afa51",
+      "silver_file": "transactions_2011-02.csv.gz",
+      "silver_sha256": "fe10af89d39f1b191915b121b62a48e4ae0400b6d52a39d2e0ef0d9f5a3065e8",
+      "row_count": 27707,
+      "quarantined_rows": 0,
+      "quarantine_file": null
+    },
+    {
+      "bronze_file": "transactions_2011-03.csv",
+      "bronze_sha256": "f9e6cd463c6254c56e35f5c160cc46a8b2a308ea6538c4e014b19f18354df4b7",
+      "silver_file": "transactions_2011-03.csv.gz",
+      "silver_sha256": "1bd54c9394a4a62753d73a7f536c5a925a593c1015749386b92bc810a626448a",
+      "row_count": 36748,
+      "quarantined_rows": 0,
+      "quarantine_file": null
+    },
+    {
+      "bronze_file": "transactions_2011-04.csv",
+      "bronze_sha256": "40ae6548c4cceaecf54e052c8b97940fd3e2183594be727c7bf87dfc3c544290",
+      "silver_file": "transactions_2011-04.csv.gz",
+      "silver_sha256": "aa75e94262460121946f26147e415d868e17e8cf23e63b179da6222942cf676c",
+      "row_count": 29916,
+      "quarantined_rows": 0,
+      "quarantine_file": null
+    },
+    {
+      "bronze_file": "transactions_2011-05.csv",
+      "bronze_sha256": "77438b55c20cf586433495c3bae8a698d8ad40ae0fe49ec5a04f7e93b872aa55",
+      "silver_file": "transactions_2011-05.csv.gz",
+      "silver_sha256": "30ce6905834df056d0f0bf9f0442328606223fa7a08183a98c6d0a0d44540b7d",
+      "row_count": 37030,
+      "quarantined_rows": 0,
+      "quarantine_file": null
+    },
+    {
+      "bronze_file": "transactions_2011-06.csv",
+      "bronze_sha256": "72441f1b4de8d5d1e49df356dde5df7ec4ddd83776b56e6951956c9741cf9945",
+      "silver_file": "transactions_2011-06.csv.gz",
+      "silver_sha256": "01405638bac3c3d961286a123efed2e227439233c6b90d9aedc42686acfe291d",
+      "row_count": 36874,
+      "quarantined_rows": 0,
+      "quarantine_file": null
+    },
+    {
+      "bronze_file": "transactions_2011-07.csv",
+      "bronze_sha256": "a26076772246067f2de5f36b676c0b7b6f5341292ffdf28b12de3538646e3628",
+      "silver_file": "transactions_2011-07.csv.gz",
+      "silver_sha256": "692902a3beae7e6819b786445c466cd1dff0483f36b48be1ba61513bdbb5927c",
+      "row_count": 39518,
+      "quarantined_rows": 0,
+      "quarantine_file": null
+    },
+    {
+      "bronze_file": "transactions_2011-08.csv",
+      "bronze_sha256": "8432cf3d2c05754d6e2ac274d491befb48d21bd52eee962f1be90e1420c6fab7",
+      "silver_file": "transactions_2011-08.csv.gz",
+      "silver_sha256": "8a9695b3c3b995e7e0ee64df1df0ce5ffeef71847651e56578d35af50c62d96a",
+      "row_count": 35284,
+      "quarantined_rows": 0,
+      "quarantine_file": null
+    },
+    {
+      "bronze_file": "transactions_2011-09.csv",
+      "bronze_sha256": "c95485e4699ff9661f460ee873c495fbebd2a495114379f12d8bf8dea5390795",
+      "silver_file": "transactions_2011-09.csv.gz",
+      "silver_sha256": "5f817950203ddf9c4ae6f6a90ef3e6067fa2b29924e11012974c16a1ef07b503",
+      "row_count": 50226,
+      "quarantined_rows": 0,
+      "quarantine_file": null
+    },
+    {
+      "bronze_file": "transactions_2011-10.csv",
+      "bronze_sha256": "ab4220701d30afa06cc40fcf908da145448300246091d82b79fc8ef690bdc4be",
+      "silver_file": "transactions_2011-10.csv.gz",
+      "silver_sha256": "e02a4b34d8f0e127fbfd220a59e1d8f2f3f25d8220c19768a2acf3e18ef4cb38",
+      "row_count": 60742,
+      "quarantined_rows": 0,
+      "quarantine_file": null
+    },
+    {
+      "bronze_file": "transactions_2011-11.csv",
+      "bronze_sha256": "8821a91e36ff68102bc1f45621276083dba81986c53e2acffe65e4b3769742c6",
+      "silver_file": "transactions_2011-11.csv.gz",
+      "silver_sha256": "9223971ee581b2fecb7e10cbc8327937d183568243da63e557142747c31523df",
+      "row_count": 84711,
+      "quarantined_rows": 0,
+      "quarantine_file": null
+    },
+    {
+      "bronze_file": "transactions_2011-12.csv",
+      "bronze_sha256": "d4cd2670c3f1e3454d6c4d2d1561232811176f37c69821f58746abd03fcba872",
+      "silver_file": "transactions_2011-12.csv.gz",
+      "silver_sha256": "a0962734f39ac8952fdc879295f2c62b484a6895f982a3799582d9e94c1dc145",
+      "row_count": 25525,
+      "quarantined_rows": 0,
+      "quarantine_file": null
+    }
+  ]
+}
