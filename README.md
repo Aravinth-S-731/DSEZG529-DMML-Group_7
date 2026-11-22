@@ -1,0 +1,621 @@
+# RecoMart Recommendation Data Pipeline
+
+## Project overview
+
+This project is the group's experiential-learning assignment for **Data
+Management for Machine Learning (S1-26_DSEZG529)**. It builds a modular data
+management pipeline for an e-commerce recommendation use case, from source
+ingestion through curated recommendation features, model evaluation, and an
+interactive inference showcase.
+
+The project is organized around the five-member work split:
+
+1. Data ingestion and Landing
+2. Bronze data lake layer
+3. Silver validation and preparation
+4. Gold feature engineering
+5. Prefect orchestration
+
+The code is designed to be auditable and reproducible: data layers verify
+manifests, schemas, checksums, and row counts; the model evaluation records its
+time-based split and data lineage; and pipeline execution is coordinated by
+Prefect.
+
+> **Scope note:** the UCI dataset is a static historical transaction dataset.
+> It does not contain website clickstream events, mobile events, customer
+> ratings, or a separately sourced product catalog. The local REST catalog API
+> in this project is derived from the same Online Retail workbook. The model is
+> batch-trained; Streamlit is intended to demonstrate on-demand inference,
+> not online training or a true streaming data source.
+
+## Run the project
+
+### Master run (recommended)
+
+Run this from the project root after activating the project virtual
+environment. Install dependencies once if needed with
+`python -m pip install -r requirements.txt`.
+
+```powershell
+python -m orchestration.run
+```
+
+This is the single command for the complete pipeline. It downloads the UCI
+workbook, captures the local catalog API, then runs both Bronze and Silver
+datasets, Gold features, feature-store registration, model training/evaluation,
+and EDA. The API is started for the Prefect flow and stopped when the flow
+finishes. Outputs are written under `data\`.
+
+To resume from an existing stage, only when its required upstream outputs are
+already present:
+
+```powershell
+python -m orchestration.run --from-stage gold
+python -m orchestration.run --from-stage model_training
+```
+
+### Run a member's module manually
+
+These commands are for running one member's layer independently. Run them in
+order because each layer needs the outputs from the previous layer.
+
+#### Member 1: Ingestion and Landing
+
+```powershell
+python .\ingestion\batch_ingest.py uci
+python .\catalog_api\server.py
+```
+
+Keep the API server running in that terminal, then run in a second terminal:
+
+```powershell
+python .\ingestion\batch_ingest.py api
+```
+
+#### Member 2: Bronze
+
+```powershell
+python -m bronze.ingest --landing-dir ".\data\landing\online_retail"
+python -m bronze.ingest --landing-dir ".\data\landing\product_catalog"
+```
+
+#### Member 3: Silver
+
+```powershell
+python -m silver.ingest --dataset online_retail
+python -m silver.ingest --dataset product_catalog
+```
+
+#### Member 4: Gold
+
+```powershell
+python -m gold.build
+```
+
+#### Member 5: Prefect orchestration
+
+Use the master-run command above to run the full flow. To make a deployment
+available in the Prefect UI, start the server in one terminal, configure its
+API URL as described in `orchestration\README.md`, and run the deployment
+runner in another terminal:
+
+```powershell
+prefect server start
+```
+
+```powershell
+python -m orchestration.serve
+```
+
+Then trigger the deployment from the Prefect UI at `http://127.0.0.1:4200`.
+
+### Streamlit recommendation demo
+
+Run this after at least one successful model-training stage:
+
+```powershell
+python -m streamlit run recommendation_model\app.py
+```
+
+The app is the customer-facing demonstration of the saved recommender. Select
+a customer profile, optionally search for recently viewed or purchased
+products by their descriptions, and get suggestions the customer has not
+already bought. Results show product names, a plain-language reason, and
+training-customer counts. The dataset has no customer names, so profiles are
+identified by customer number. The app loads the latest saved model; it does
+not train or update the model when someone requests recommendations.
+
+## Business problem
+
+RecoMart wants to recommend products to existing customers using their prior
+purchases. The pipeline turns invoice-line transactions into validated,
+customer-linked product interactions and product/customer features. A
+collaborative-filtering model then ranks products a customer has not already
+purchased.
+
+The expected outcomes are:
+
+- validated and auditable data for analysis;
+- customer, product, and customer-product feature tables;
+- an evaluated recommendation model and a saved inference artifact;
+- repeatable runs and a browser-based recommendation demonstration.
+
+The current model evaluation uses Precision@K, Recall@K, and NDCG@K. These
+ranking metrics are calculated on a chronological holdout and compared with a
+training-popularity baseline.
+
+## Dataset
+
+- **Dataset:** [UCI Online Retail](https://archive.ics.uci.edu/dataset/352/online+retail)
+- **Unit of observation:** an invoice line, not a click or a rating.
+- **Source columns:** invoice number, stock code, description, quantity, invoice
+  date, unit price, customer ID, and country.
+- **Observed source size:** 541,909 transaction lines across 13 invoice-month
+  batches, from December 2010 through December 2011.
+- **Customer IDs:** 135,080 source rows have no customer ID. These rows remain
+  available for audit, but cannot be used for personalized interactions.
+- **Catalog API:** demonstrates REST ingestion, but serves products derived
+  from the workbook and is not an independent external source.
+
+The dataset includes cancellations, returns, repeated content, missing values,
+and exceptional prices. These are retained and flagged in Silver rather than
+silently treated as positive recommendation feedback.
+
+## Architecture and flow
+
+```text
+UCI Online Retail workbook
+        |
+        +--> Raw source archive and workbook
+        |
+        +--> Landing: monthly transaction CSV files
+        |       |
+        |       +--> Bronze: source lineage, row identity, checksums
+        |               |
+        |               +--> Silver: standardized, validated transactions
+        |                       |
+        |                       +--> Gold customer/product/interactions
+        |                               |
+        |                               +--> Versioned feature store
+        |                               |
+        |                               +--> Recommendation model,
+        |                               |    temporal evaluation, run tracking
+        |                               |       |
+        |                               |       +--> Saved model --> Streamlit app
+        |                               |
+        |                               +--> EDA dashboard and PNG exports
+        |
+        +--> Local catalog REST API --> raw JSON --> Landing product CSV
+```
+
+The current Prefect stage order is:
+
+1. UCI ingestion to Raw and Landing
+2. Catalog API capture to Raw and Landing
+3. Bronze transaction ingestion
+4. Bronze catalog ingestion
+5. Silver transaction processing
+6. Silver catalog processing
+7. Gold feature engineering
+8. Feature-store registration
+9. Recommendation-model training and evaluation
+10. EDA generation
+
+The catalog API is started when the Prefect flow reaches API capture and stays
+available for the rest of that flow run. Orchestration stops the process when
+the flow finishes.
+
+## Five-member implementation
+
+### Member 1: ingestion and Landing
+
+Implemented in `ingestion\batch_ingest.py`, with the source API in
+`catalog_api\server.py`.
+
+- Downloads the UCI archive and retains the ZIP/workbook under `data\raw`.
+- Splits the workbook into 13 monthly transaction CSV files under
+  `data\landing\online_retail`.
+- Captures the local REST API response under `data\raw\product_catalog` and
+  writes its processed product CSV under `data\landing\product_catalog`.
+- Writes manifests with row counts and checksums for the raw and Landing
+  inputs.
+- Does not claim the API catalog is an independent dataset.
+
+Use the Member 1 commands in [Run the project](#run-the-project) for manual
+ingestion. The full Prefect flow manages API startup, health checking, capture,
+and shutdown automatically.
+
+### Member 2: Bronze
+
+Implemented in `bronze\`.
+
+- Consumes processed Landing files without changing business values.
+- Checks the Landing manifest, input checksum, schema, and row count.
+- Adds source filename/type/hash, source row number, batch ID, ingestion time,
+  record ID, record-content hash, and schema version.
+- Streams CSV rows instead of loading the whole transaction dataset at once.
+- Uses the Bronze manifest as an incremental ledger: unchanged inputs with
+  intact outputs can be skipped; changed or missing outputs are rebuilt.
+- Keeps repeated rows separate while recording matching content hashes.
+
+Use the Member 2 commands in [Run the project](#run-the-project) after Landing
+has been created.
+
+### Member 3: Silver
+
+Implemented in `silver\`.
+
+- Verifies Bronze manifests, checksums, schemas, and row counts.
+- Standardizes names, whitespace, timestamps, stock codes, quantities, and
+  prices; adds line totals and quality/eligibility flags.
+- Uses three decimal places for prices to avoid Excel floating-point noise
+  while preserving the four actual `0.001` prices.
+- Flags cancellations, returns, adjustments, missing customer IDs, missing
+  descriptions, and duplicate content without deleting those records.
+- Marks a row recommendation-eligible only when it represents a
+  customer-linked positive purchase.
+- Writes compressed CSVs, a quality report, and a Silver manifest.
+- Sends rows with unparseable required values to quarantine with a reason.
+
+Use the Member 3 commands in [Run the project](#run-the-project) after both
+Bronze datasets have been processed.
+
+Observed Silver quality counts:
+
+| Metric | Observed value |
+|---|---:|
+| Transaction input/Silver rows | 541,909 |
+| Quarantined transaction rows | 0 |
+| Rows with missing customer ID | 135,080 |
+| Cancellation invoice rows | 9,288 |
+| Negative-quantity return rows | 10,624 |
+| Duplicate-content rows flagged | 5,268 |
+| Recommendation-eligible rows before duplicate exclusion | 397,924 |
+| Product catalog rows | 4,070 |
+| Product catalog duplicate-code rows | 112 |
+| Product catalog missing-description rows | 112 |
+
+These are quality flags and counts; the flagged rows remain auditable.
+
+### Member 4: Gold
+
+Implemented in `gold\`.
+
+Gold verifies Silver inputs and applies the recommendation policy:
+
+- include rows with `is_recommendation_eligible=true`;
+- exclude rows marked `is_duplicate_content=true`;
+- aggregate positive purchase interactions by customer and product;
+- retain purchase-line count, quantity, spend, and first/last purchase time.
+
+Gold outputs:
+
+- `customer_product_interactions.csv.gz`: one row per customer-product pair;
+- `customer_features.csv.gz`: one row per active customer;
+- `product_features.csv.gz`: catalog and sales features per product;
+- `quality_report.json` and `gold_manifest.json`.
+
+Use the Member 4 command in [Run the project](#run-the-project) after both
+Silver datasets have been processed.
+
+Observed Gold profile:
+
+| Metric | Observed value |
+|---|---:|
+| Silver input rows | 541,909 |
+| Recommendation-eligible rows | 397,924 |
+| Eligible duplicate rows excluded | 5,192 |
+| Positive, deduplicated purchase lines used | 392,732 |
+| Customer-product interactions | 266,802 |
+| Active customers | 4,339 |
+| Catalog products represented | 3,958 |
+| Products with sales | 3,665 |
+| Products without sales | 293 |
+
+### Member 5: Prefect orchestration
+
+Implemented in `orchestration\run.py` and `orchestration\serve.py`.
+
+- Runs ingestion, both Bronze datasets, both Silver datasets, Gold,
+  feature-store registration, model training/evaluation, and EDA in dependency
+  order.
+- Captures stage logs and fails the run when a layer raises an error.
+- Supports `--from-stage` for resuming at a known stage when required upstream
+  data already exists.
+- Starts the derived catalog API, checks its health endpoint, captures data,
+  and stops the process.
+- Supports on-demand Prefect UI deployment and optional cron scheduling.
+
+The master flow and optional Prefect UI deployment commands are listed in
+[Run the project](#run-the-project). The UCI source is static, so no recurring
+schedule is enabled by default; `orchestration\README.md` documents the
+optional cron configuration.
+
+## Feature store
+
+Implemented in `feature_store\` as a custom local, versioned feature store.
+
+- Defines `customer_features`, `product_features`, and
+  `customer_product_interactions` feature views.
+- Documents feature names, entity keys, types, sources, and transformations.
+- Registers immutable Gold snapshots with their metadata, source lineage,
+  checksums, and row counts.
+- Supports version-pinned Python retrieval and a command-line lookup.
+- Uses an active-version pointer while retaining earlier snapshots.
+
+Manual registration and sample retrieval:
+
+```powershell
+python -m feature_store.register
+$version = (Get-Content .\data\feature_store\registry.json -Raw | ConvertFrom-Json).active_version
+python -m feature_store.retrieve `
+  --view customer_features `
+  --filter customer_id=12347 `
+  --version $version
+```
+
+At the last recorded check, two feature versions were registered and the active
+version was `v1-cff72041ecd9156fee8b`. The current registry is the source of
+truth if later pipeline runs have added versions.
+
+## EDA dashboard
+
+Implemented in `eda\generate.py`. EDA deliberately combines layers:
+
+- **Silver** supplies transaction timestamps for monthly purchase trends.
+- **Gold** supplies product popularity, customer product-diversity features,
+  and canonical customer-product interactions for sparsity.
+- Gold's recorded lineage is checked against both current Silver manifests.
+- Silver analyzed purchase-line totals are reconciled with Gold interactions.
+
+Outputs are under `data\eda`:
+
+- `index.html`: self-contained dashboard with four interactive SVG charts,
+  metrics, observations, and a refresh button;
+- `summary.json`: machine-readable counts, lineage, dates, and chart data;
+- `plots\interaction_patterns.png`;
+- `plots\item_popularity.png`;
+- `plots\interaction_sparsity.png`.
+
+The PNGs remain downloadable from the page. A current observed matrix has
+4,339 customers, 3,665 active products, and 266,802 observed pairs out of
+15,902,435 possible pairs: **1.677743% density and 98.322257% sparsity**.
+The customer-product heatmap is a selected top-customer/top-product subset;
+the headline sparsity is calculated over the full active matrix.
+
+Manual EDA generation:
+
+```powershell
+python -m eda.generate
+```
+
+Open `data\eda\index.html` in a browser after a pipeline run. The dashboard is
+static and does not require a separate web server.
+
+## Recommendation model and evaluation
+
+Implemented in `recommendation_model\`.
+
+- Algorithm: binary item-item collaborative filtering using cosine similarity
+  between items purchased by the same customers.
+- Stores up to 100 nearest item neighbors per product.
+- Uses a global chronological split: all events at or before the timestamp
+  cutoff are training; later events are holdout. Events at the cutoff timestamp
+  stay together.
+- Computes macro-averaged Precision@K, Recall@K, and NDCG@K for K=5, 10, and
+  20 over users with at least one future, previously unseen, warm-catalog item.
+- Excludes previously purchased user-item pairs from relevance and reports
+  cold-start items and users separately.
+- Compares against a popularity-ranking baseline.
+- Evaluates only on the held-out future period; after evaluation, refits and
+  saves the inference model using all eligible Silver events.
+- Tracks the run's parameters, metrics, and artifact paths/sizes/SHA-256 hashes
+  in a local JSON experiment store.
+
+Latest verified evaluation:
+
+| Model | P@5 | R@5 | NDCG@5 | P@10 | R@10 | NDCG@10 | P@20 | R@20 | NDCG@20 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Item-item cosine | 0.0605 | 0.0237 | 0.0668 | 0.0518 | 0.0384 | 0.0636 | 0.0448 | 0.0618 | 0.0658 |
+| Popularity baseline | 0.0357 | 0.0117 | 0.0376 | 0.0342 | 0.0200 | 0.0378 | 0.0342 | 0.0381 | 0.0427 |
+
+Evaluation details:
+
+- **Run ID:** `fb12e0effeca443c9eb3b2035723e5c0`
+- **Cutoff (inclusive in training):** `2011-11-01T15:55:00`
+- **Training events:** 314,209
+- **Held-out events:** 78,523
+- **Evaluated users:** 1,428
+- **Warm-item coverage of new-to-user test pairs:** 98.01%
+- **Model type:** batch-trained, implicit-feedback item-item recommender.
+
+Saved artifacts:
+
+- `data\models\item_item_cosine\latest.json`
+- `data\models\item_item_cosine\<run-id>\model.json.gz`
+- `data\models\item_item_cosine\<run-id>\evaluation.json`
+- `data\models\item_item_cosine\<run-id>\evaluation.md`
+- `data\model_tracking\experiments\online-retail-recommendations\runs\<run-id>\run.json`
+
+Train and evaluate manually:
+
+```powershell
+python -m recommendation_model.train
+```
+
+List tracked experiment runs:
+
+```powershell
+python -m recommendation_model.tracking
+```
+
+Generate recommendations from the saved model:
+
+```powershell
+python -m recommendation_model.inference --customer-id 14911 --top-k 10
+```
+
+The current recommender reads Silver events directly for its temporal split
+and training. The feature store is separately implemented and versioned, but
+the training code does not yet consume a pinned feature-store version.
+
+### Experiment tracking note
+
+The model run was completed with the project's local JSON experiment tracker,
+which records parameters, metrics, run status, and checksums for the saved
+model and reports. It does **not** create MLflow runs or provide an MLflow UI.
+An MLflow installation was attempted but failed when the D: drive ran out of
+space. `requirements.txt` still lists `mlflow>=2.0,<4.0`; the current trainer
+does not import MLflow.
+
+## Streamlit showcase
+
+`recommendation_model\app.py` is the interactive, customer-facing demonstration
+of the recommender. It helps someone explore the saved model by choosing a
+customer profile and optionally adding products from the current session. It
+then suggests products the customer has not already bought and explains
+whether each suggestion relates to the customer's purchase history or is
+popular with other training customers.
+
+The app also presents offline model evaluation in plain language and compares
+the recommender with a popularity-only baseline. Product names are loaded from
+the Gold feature table and checked against its manifest. The dataset does not
+contain customer names, so customers are shown by ID. Recent product choices
+only affect that request; the app does not train from user activity. Use
+**Check for latest model** after a successful Prefect model-training run to
+load the latest saved artifact.
+
+Launch it from the project root after the pipeline has generated a model:
+
+```powershell
+python -m streamlit run recommendation_model\app.py
+```
+
+Streamlit is declared in `requirements.txt`. The app has been launched locally,
+the latest saved model and matching Gold product data loaded, and a sample
+recommendation request was verified in the browser.
+
+## Current workspace snapshot
+
+The current workspace contains generated outputs in:
+
+```text
+data/
+  raw/
+  landing/
+  bronze/
+  silver/
+  gold/
+  eda/
+  feature_store/
+  models/
+  model_tracking/
+  orchestration/
+```
+
+A fresh workspace can recreate these outputs by running the master flow from
+UCI ingestion.
+
+The initial Prefect screenshot is
+`project_documentation\evidence\prefect_full_pipeline.png`. It documents an
+earlier run before feature store, model training, and the latest EDA flow were
+added; do not present it as proof of the current full pipeline.
+
+## Dependencies and environment
+
+Declared in `requirements.txt`:
+
+- `prefect>=3.9,<4.0`
+- `matplotlib>=3.9,<4.0`
+- `mlflow>=2.0,<4.0` (currently unused by the local experiment tracker)
+- `streamlit>=1.40,<2.0`
+
+The project has an active `.venv` in this workspace. For a fresh setup, create
+the virtual environment and install dependencies:
+
+```powershell
+py -3.13 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+MLflow is listed in `requirements.txt` but is not used by the current trainer,
+which writes to a local JSON experiment tracker.
+
+## Verification completed
+
+- Ingestion produced 13 monthly transaction batches and 4,070 catalog rows in
+  the earlier run.
+- Bronze and Silver were exercised against the real datasets; manifests and
+  quality reports were generated. Silver retained all 541,909 transaction
+  rows and reported no quarantine rows.
+- Gold metrics and output row counts were checked against generated manifests.
+- Feature-store retrieval and pinned snapshots were exercised; registry
+  retained multiple versions.
+- EDA metrics reconciled between Silver and Gold. The interactive page was
+  opened in a browser: four SVG charts, three PNG exports, and no JavaScript
+  errors were observed.
+- A full Prefect flow from UCI ingestion through EDA completed, including
+  catalog API capture, Bronze, Silver, Gold, feature-store registration, model
+  training, and dashboard generation.
+- The latest model artifact was loaded through its latest pointer, sample
+  inference returned 10 unseen products for a known customer. The Streamlit UI
+  and its human-readable recommendation output were verified in the browser;
+  all four recommendation/app tests passed.
+
+## Assignment deliverable status
+
+| Assignment area | Project status |
+|---|---|
+| Problem formulation | Business context and pipeline objective are documented here; formal final report remains to be written. |
+| Data collection and ingestion | Code, local catalog REST capture, manifests, retries/logging, and raw/Landing design implemented. Catalog API is derived from the same workbook. |
+| Raw data storage | Raw/Landing/Bronze layout implemented and populated by the latest full pipeline run. |
+| Profiling and validation | Programmatic checks and JSON quality reports implemented; a standalone Data Quality PDF remains. |
+| Preparation and EDA | Silver preparation and EDA script, interactive dashboard, summary JSON, and PNG charts implemented; no notebook is currently included. |
+| Feature engineering and transformation | Gold customer/product/interaction features implemented; SQL schema deliverable remains. |
+| Feature store | Custom metadata registry, immutable versions, checksums, pinned retrieval, and sample retrieval implemented. |
+| Data versioning and lineage | Layer manifests and model run checksums exist; DVC/Git LFS workflow is not implemented. Workspace is not currently a Git repository. |
+| Model training and evaluation | Saved item-item model, temporal metrics, baseline, local experiment run record, and CLI inference implemented. MLflow proper is not used. |
+| Orchestration | Prefect flow, stage resumption, local UI/deployment support, and successful full-pipeline execution implemented; capture an updated full-flow screenshot for the report. |
+| Final submission | Final PDF report, walkthrough video, project ZIP, and accessible Drive links remain. |
+
+The assignment text asks for a 5-10 minute video, while the earlier course
+portal text says a maximum of 3 minutes. Confirm the expected duration with the
+instructor before recording.
+
+The final submission instructions specify one PDF containing the project
+title, team details, problem statement, objectives, methodology/pipeline,
+implementation details, results and screenshots, conclusion, and future scope.
+It must also include accessible Google Drive links to the video walkthrough
+and to a ZIP containing source code, applicable datasets, trained model,
+documentation, and supporting files. These final submission assets and links
+have not yet been prepared.
+
+## Documentation and handoff
+
+Each module has its own detailed README:
+
+- `ingestion\README.md`
+- `bronze\README.md`
+- `silver\README.md`
+- `gold\README.md`
+- `feature_store\README.md`
+- `eda\README.md`
+- `recommendation_model\README.md`
+- `orchestration\README.md`
+- `project_documentation\README.md`
+
+`CHAT_EXPORT.md` contains the chronological user/assistant text messages from
+the Copilot session and a short handoff summary at the beginning. It excludes
+tool output and system/developer instructions. Use the handoff section when
+starting a new chat; the transcript is available for additional detail.
+
+## Recommended next steps
+
+1. Capture current Prefect and Streamlit screenshots for the final report/demo.
+2. Implement DVC after deciding on a storage remote with adequate capacity;
+   do not store a duplicate DVC remote on the nearly full D: drive.
+3. Add the SQL schema deliverable and Data Quality PDF.
+4. Prepare the final report, record the instructor-approved video duration,
+   package the project, and verify Drive access for BITS accounts.

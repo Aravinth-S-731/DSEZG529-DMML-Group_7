@@ -1,0 +1,160 @@
+{
+  "schema_version": "1",
+  "feature_store_name": "online_retail",
+  "description": "Versioned offline features for recommendation training and inference.",
+  "feature_views": {
+    "customer_features": {
+      "entity_keys": ["customer_id"],
+      "source_file": "customer_features.csv.gz",
+      "description": "Customer activity aggregated from eligible, deduplicated purchases.",
+      "features": [
+        {
+          "name": "unique_products",
+          "type": "integer",
+          "description": "Distinct products purchased by the customer.",
+          "transformation": "Count distinct stock codes in the customer's Gold interactions."
+        },
+        {
+          "name": "purchase_line_count",
+          "type": "integer",
+          "description": "Number of eligible purchase lines for the customer.",
+          "transformation": "Sum purchase_line_count across the customer's product interactions."
+        },
+        {
+          "name": "total_units_purchased",
+          "type": "integer",
+          "description": "Total positive units purchased by the customer.",
+          "transformation": "Sum quantity_purchased across the customer's product interactions."
+        },
+        {
+          "name": "total_spend",
+          "type": "decimal",
+          "unit": "GBP",
+          "description": "Total recorded spend for the customer.",
+          "transformation": "Sum interaction spend across all products for the customer."
+        },
+        {
+          "name": "first_purchase_at",
+          "type": "timestamp",
+          "description": "Timestamp of the customer's earliest eligible purchase.",
+          "transformation": "Minimum first_purchase_at across the customer's product interactions."
+        },
+        {
+          "name": "last_purchase_at",
+          "type": "timestamp",
+          "description": "Timestamp of the customer's most recent eligible purchase.",
+          "transformation": "Maximum last_purchase_at across the customer's product interactions."
+        }
+      ]
+    },
+    "product_features": {
+      "entity_keys": ["stock_code"],
+      "source_file": "product_features.csv.gz",
+      "description": "Catalog and purchase activity features at product level.",
+      "features": [
+        {
+          "name": "description",
+          "type": "string",
+          "description": "Selected normalized catalog description for the product.",
+          "transformation": "Most frequent non-empty Silver catalog description; ties are alphabetical."
+        },
+        {
+          "name": "catalog_record_count",
+          "type": "integer",
+          "description": "Number of Silver catalog records for the product code.",
+          "transformation": "Count catalog rows grouped by stock_code."
+        },
+        {
+          "name": "is_duplicate_catalog_code",
+          "type": "boolean",
+          "description": "Whether the catalog contains the product code more than once.",
+          "transformation": "catalog_record_count greater than one."
+        },
+        {
+          "name": "purchase_line_count",
+          "type": "integer",
+          "description": "Eligible purchase lines containing the product.",
+          "transformation": "Sum interaction purchase_line_count grouped by stock_code."
+        },
+        {
+          "name": "unique_customers",
+          "type": "integer",
+          "description": "Distinct customers who purchased the product.",
+          "transformation": "Count distinct customer_id values grouped by stock_code."
+        },
+        {
+          "name": "units_sold",
+          "type": "integer",
+          "description": "Total eligible units purchased for the product.",
+          "transformation": "Sum interaction quantity_purchased grouped by stock_code."
+        },
+        {
+          "name": "gross_sales",
+          "type": "decimal",
+          "unit": "GBP",
+          "description": "Total recorded spend for the product.",
+          "transformation": "Sum interaction spend grouped by stock_code."
+        },
+        {
+          "name": "first_sold_at",
+          "type": "timestamp",
+          "nullable": true,
+          "description": "Earliest eligible purchase timestamp, empty for unsold catalog products.",
+          "transformation": "Minimum first_purchase_at across interactions for the product."
+        },
+        {
+          "name": "last_sold_at",
+          "type": "timestamp",
+          "nullable": true,
+          "description": "Most recent eligible purchase timestamp, empty for unsold catalog products.",
+          "transformation": "Maximum last_purchase_at across interactions for the product."
+        },
+        {
+          "name": "popularity_rank",
+          "type": "integer",
+          "nullable": true,
+          "description": "Popularity rank among products with sales; empty for unsold products.",
+          "transformation": "Rank by unique_customers descending, then purchase_line_count descending, then stock_code."
+        }
+      ]
+    },
+    "customer_product_interactions": {
+      "entity_keys": ["customer_id", "stock_code"],
+      "source_file": "customer_product_interactions.csv.gz",
+      "description": "Customer-product implicit-feedback features for training and lookup.",
+      "features": [
+        {
+          "name": "purchase_line_count",
+          "type": "integer",
+          "description": "Eligible purchase lines for this customer-product pair.",
+          "transformation": "Count eligible deduplicated purchase lines grouped by customer_id and stock_code."
+        },
+        {
+          "name": "quantity_purchased",
+          "type": "integer",
+          "description": "Total positive units bought by the customer from the product.",
+          "transformation": "Sum quantity over eligible deduplicated purchase lines in the pair."
+        },
+        {
+          "name": "spend",
+          "type": "decimal",
+          "unit": "GBP",
+          "description": "Total recorded spend for the customer-product pair.",
+          "transformation": "Sum line_total over eligible deduplicated purchase lines in the pair."
+        },
+        {
+          "name": "first_purchase_at",
+          "type": "timestamp",
+          "description": "Earliest purchase timestamp for the pair.",
+          "transformation": "Minimum invoice_datetime grouped by customer_id and stock_code."
+        },
+        {
+          "name": "last_purchase_at",
+          "type": "timestamp",
+          "description": "Most recent purchase timestamp for the pair.",
+          "transformation": "Maximum invoice_datetime grouped by customer_id and stock_code."
+        }
+      ]
+    }
+  }
+}
