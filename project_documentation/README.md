@@ -66,9 +66,19 @@ and NDCG@K against a popularity baseline, saves a full-data inference model,
 and tracks the run, parameters, metrics, and artifact checksums in the local
 experiment store under `../data/model_tracking/`.
 
+## Gold SQL schema
+
+The SQLite/PostgreSQL-compatible schema for the three Gold feature tables is in
+[`../sql/gold_schema.sql`](../sql/gold_schema.sql). It mirrors the Gold CSV
+outputs and defines their keys, relationships, and basic data constraints.
+After a successful Prefect run, `python -m gold.load_sqlite` verifies the
+manifest and materializes `data/warehouse/online_retail.sqlite3`. This is a
+post-run step; the Prefect flow still writes and versions the Gold CSVs.
+
 ## Remaining assignment work
 
-- Commit and push the configured Git LFS data snapshot; see
-  [Data versioning with Git LFS](../README.md#data-versioning-with-git-lfs).
-- Data-quality PDF and final project report
-- Walkthrough video, project ZIP, and accessible Drive links
+- Data Quality PDF and final project report (deferred as requested).
+- 5–10 minute walkthrough video (deferred as requested).
+- Project ZIP and BITS-accessible Drive links (deferred as requested).
+- If required for full scenario coverage: independent clickstream/product API
+  sources and true near-real-time ingestion.

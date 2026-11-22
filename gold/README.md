@@ -61,3 +61,21 @@ data/
 
 All data outputs are gzip-compressed CSVs and can be opened with Python's
 `gzip` module or Pandas compression inference.
+
+The matching SQLite/PostgreSQL-compatible table definitions and keys are in
+[`../sql/gold_schema.sql`](../sql/gold_schema.sql). This schema documents a
+warehouse representation; the current pipeline continues to write CSV files.
+The SQLite loader converts empty `first_sold_at`, `last_sold_at`, and
+`popularity_rank` values in `product_features.csv.gz` to SQL `NULL`.
+
+To materialize the three Gold tables in a local SQLite warehouse after Gold is
+built, run:
+
+```powershell
+python -m gold.load_sqlite
+```
+
+The loader verifies the Gold manifest, file sizes, checksums, CSV schemas, and
+row counts before replacing `data/warehouse/online_retail.sqlite3`. It also
+checks the database's foreign keys and integrity. The SQLite database is
+regenerable and ignored by Git; the source CSVs and manifests remain versioned.

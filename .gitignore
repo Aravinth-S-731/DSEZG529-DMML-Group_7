@@ -1,6 +1,7 @@
 # Re-creatable dashboards and local API logs
 /data/eda/
 /data/orchestration/
+/data/warehouse/
 
 # Python virtual environments and generated caches
 .venv/
